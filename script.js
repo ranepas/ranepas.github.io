@@ -715,7 +715,6 @@ function loadTimelineGame(period) {
         }
       } else {
         card.classList.add("wrong");
-        feedbackEl.textContent = explainTimelineMistake();
         setTimeout(() => card.classList.remove("wrong"), 800);
       }
     });
@@ -778,15 +777,19 @@ function loadTrueFalseGame(period) {
       tfCorrect++;
       feedbackEl.textContent = "Правильно.";
     } else {
-      feedbackEl.textContent = explainTFMistake(q);
+      // На мобильных подсказку (длинный текст) на неверный ответ показывать не нужно:
+      // она часто перекрывает интерактивные кнопки выбора.
+      feedbackEl.textContent = "";
       // Визуальный отклик для неправильного ответа
       const clickedBtn = answer ? trueBtn : falseBtn;
       clickedBtn.classList.add("wrong-answer");
       setTimeout(() => clickedBtn.classList.remove("wrong-answer"), 500);
     }
     tfIndex++;
-    feedbackEl.scrollIntoView({ behavior: "smooth", block: "nearest" });
-    setTimeout(() => renderQuestion(), 1400);
+    if (feedbackEl.textContent) {
+      feedbackEl.scrollIntoView({ behavior: "smooth", block: "nearest" });
+    }
+    setTimeout(() => renderQuestion(), 650);
   }
 
   renderQuestion();
@@ -870,7 +873,9 @@ function tryMatch(period, leftCol, rightCol) {
       finishPeriod();
     }
   } else {
-    feedbackEl.textContent = explainMatchMistake();
+    // Убираем подсказку-длинный текст при неверном ответе,
+    // чтобы она не мешала чтению и выбору вариантов.
+    feedbackEl.textContent = "";
     leftEl.classList.remove("selected");
     rightEl.classList.remove("selected");
   }
