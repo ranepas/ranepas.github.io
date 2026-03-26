@@ -250,7 +250,7 @@ button,
 
 .character {
     position: fixed;
-    z-index: 10;
+    z-index: 1;
     bottom: 0;
     width: clamp(280px, 30vw, 500px);
     height: auto;
@@ -306,7 +306,7 @@ button,
     box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
     cursor: pointer;
     user-select: none;
-    z-index: 50;
+    z-index: 120;
 }
 
 .dialogue-box:hover {
@@ -336,7 +336,7 @@ button,
     border: 1px solid rgba(255, 255, 255, 0.2);
     cursor: pointer;
     transition: all 0.2s;
-    z-index: 55;
+    z-index: 160;
     -webkit-tap-highlight-color: transparent;
 }
 
@@ -481,7 +481,7 @@ button,
     border: 1px solid rgba(255, 255, 255, 0.12);
     box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
     backdrop-filter: blur(10px);
-    z-index: 50;
+    z-index: 80;
     max-height: calc(100vh - 120px);
     display: flex;
     flex-direction: column;
@@ -888,7 +888,7 @@ button,
 
     .dialogue-box {
         bottom: max(10px, env(safe-area-inset-bottom));
-        padding: 18px 20px 58px;
+        padding: 18px 20px 98px;
         max-height: calc(100vh - 126px);
         overflow-y: auto;
     }
@@ -901,7 +901,8 @@ button,
 
     .story-text {
         min-height: 0;
-        margin-bottom: 10px;
+        margin-bottom: 0;
+        padding-bottom: 54px; /* резерв под кнопки снизу внутри dialogue-box */
     }
 
     .match-grid {
@@ -1003,6 +1004,10 @@ button,
     .game-card,
     .dialogue-box {
         padding: 16px;
+    }
+
+    .dialogue-box {
+        padding-bottom: 88px;
     }
 
     .timeline-card,
