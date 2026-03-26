@@ -963,11 +963,11 @@ function openContacts() {
   openModal(
     "Контакты",
     `<ul style="line-height:1.8; padding-left: 20px;">
-            <li><strong>Автор проекта:</strong> [Ваше ФИО]</li>
-            <li><strong>Группа / курс:</strong> [Ваша группа]</li>
-            <li><strong>Email:</strong> [ваша@почта.com]</li>
-            <li><strong>Telegram:</strong> [@ваш_ник]</li>
-            <li><strong>Репозиторий:</strong> [ссылка на GitHub]</li>
+            <li><strong>Команда:</strong> «Костыли»</li>
+            <li><strong>Группа:</strong> ИСПб-036</li>
+            <li><strong>Email:</strong> sokolova.verochka@internet.ru</li>
+            <li><strong>Telegram:</strong> @Girlzzxl</li>
+            <li><strong>Репозиторий:</strong> https://github.com/ranepas/ranepas.github.io</li>
         </ul>`,
   );
 }
