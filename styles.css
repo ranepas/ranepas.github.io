@@ -24,12 +24,12 @@ body.header-collapsed {
     padding-top: 0;
 }
 
-/* HEADER TOGGLE */
 .header-toggle {
     position: fixed;
     top: 0;
-    left: 50%;
-    transform: translateX(-50%);
+    right: 16px;
+    left: auto;
+    transform: none;
     z-index: 100;
     background: #921a1d;
     color: white;
@@ -38,24 +38,25 @@ body.header-collapsed {
     padding: 8px 20px;
     font-size: 16px;
     cursor: pointer;
-    transition: background-color 0.25s ease, box-shadow 0.25s ease, transform 0.2s ease;
+    transition: background-color 0.25s ease, box-shadow 0.25s ease;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
     -webkit-tap-highlight-color: transparent;
 }
 
 .header-toggle:hover {
     background: #7a1518;
+    transform: none;
 }
 
 .header-toggle:active {
-    transform: translateX(-50%) translateY(1px) scale(0.98);
+    transform: none;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.45);
 }
 
 .header-toggle.is-collapsed {
     background: #7a1518;
 }
 
-/* TOPBAR */
 .topbar {
     position: fixed;
     top: 0;
@@ -109,7 +110,6 @@ body.header-collapsed {
     flex-wrap: wrap;
 }
 
-/* BUTTONS */
 button {
     border: none;
     border-radius: 10px;
@@ -144,8 +144,10 @@ button,
 .match-item,
 .explore-card,
 .tf-btn,
-.header-toggle {
-    -webkit-tap-highlight-color: transparent;
+.header-toggle,
+.dialogue-box,
+.game-card {
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
 
 .nav button,
@@ -159,7 +161,6 @@ button,
     color: #0f172a;
 }
 
-/* APP CONTAINER */
 .app {
     position: relative;
     min-height: 100vh;
@@ -167,7 +168,6 @@ button,
     overflow: hidden;
 }
 
-/* BACKGROUND */
 .bg {
     position: fixed;
     inset: 0;
@@ -191,7 +191,6 @@ button,
     pointer-events: none;
 }
 
-/* START SCREEN */
 .start-overlay {
     min-height: 100vh;
     display: flex;
@@ -200,16 +199,40 @@ button,
     padding: 20px;
 }
 
+.menu-overlay {
+    flex-direction: column;
+    gap: 24px;
+    padding: 24px;
+}
+
 .start-card {
     width: 100%;
     max-width: 700px;
-    background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(12px);
+    background: rgba(14, 18, 34, 0.84);
+    backdrop-filter: blur(16px);
     border-radius: 24px;
-    padding: 40px;
+    padding: 24px;
     text-align: center;
     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
     border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.contacts-card {
+    width: 100%;
+    max-width: 700px;
+    border-radius: 24px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    background: rgba(10, 14, 26, 0.86);
+    backdrop-filter: blur(14px);
+    box-shadow: 0 14px 40px rgba(0, 0, 0, 0.38);
+    text-align: center;
+    padding: 24px;
+}
+
+.contacts-card p {
+    margin: 0;
+    font-size: 16px;
+    color: #e2e8f0;
 }
 
 .start-card h2 {
@@ -225,7 +248,6 @@ button,
     margin-bottom: 24px;
 }
 
-/* CHARACTERS */
 .character {
     position: fixed;
     z-index: 10;
@@ -250,7 +272,6 @@ button,
     transform: translateX(-50%);
 }
 
-/* SCREENS */
 .screen {
     position: relative;
     z-index: 5;
@@ -263,14 +284,12 @@ button,
     display: block;
 }
 
-/* STORY LAYOUT */
 .story-layout {
     position: relative;
     min-height: 100vh;
     width: 100%;
 }
 
-/* DIALOGUE BOX */
 .dialogue-box {
     position: fixed;
     left: 50%;
@@ -278,12 +297,12 @@ button,
     bottom: 20px;
     width: 90%;
     max-width: 900px;
-    background: rgba(30, 30, 40, 0.85);
+    background: rgba(12, 16, 30, 0.9);
     border: 1px solid rgba(255, 255, 255, 0.15);
     border-radius: 20px;
     padding: 24px 28px 56px;
     min-height: 180px;
-    backdrop-filter: blur(8px);
+    backdrop-filter: blur(14px);
     box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
     cursor: pointer;
     user-select: none;
@@ -295,7 +314,10 @@ button,
 }
 
 .click-hint {
-    margin-top: 12px;
+    position: absolute;
+    right: 16px;
+    bottom: 14px;
+    margin: 0;
     text-align: right;
     font-size: 12px;
     color: rgba(255, 255, 255, 0.5);
@@ -322,7 +344,6 @@ button,
     background: rgba(255, 255, 255, 0.25);
 }
 
-/* HISTORY MODAL */
 .history-modal {
     position: fixed;
     inset: 0;
@@ -410,14 +431,14 @@ button,
 }
 
 .speaker {
-    font-size: 18px;
+    font-size: 20px;
     font-weight: bold;
     color: #f3dada;
     margin-bottom: 10px;
 }
 
 .story-text {
-    font-size: 16px;
+    font-size: 18px;
     line-height: 1.7;
     min-height: 100px;
     white-space: pre-line;
@@ -454,12 +475,12 @@ button,
     bottom: 20px;
     width: 90%;
     max-width: 900px;
-    background: rgba(20, 25, 45, 0.9);
+    background: rgba(10, 14, 28, 0.9);
     border-radius: 20px;
     padding: 24px 28px;
     border: 1px solid rgba(255, 255, 255, 0.12);
     box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
-    backdrop-filter: blur(10px);
+    backdrop-filter: blur(14px);
     z-index: 50;
     max-height: calc(100vh - 120px);
     display: flex;
@@ -484,7 +505,7 @@ button,
 
 #gameSubtitle {
     margin: 0;
-    font-size: 15px;
+    font-size: 17px;
     color: #cbd5e1;
 }
 
@@ -511,7 +532,7 @@ button,
 #feedback {
     min-height: 0;
     overflow: visible;
-    font-size: 15px;
+    font-size: 17px;
     line-height: 1.6;
     color: #f3f4f6;
     margin-bottom: 16px;
@@ -793,6 +814,12 @@ button,
 }
 
 @media (max-width: 640px) {
+    .header-toggle {
+        top: 8px;
+        right: 8px;
+        z-index: 120;
+    }
+
     body {
         padding-top: 60px;
     }
@@ -830,17 +857,18 @@ button,
 
     .character {
         display: block;
-        width: clamp(130px, 33vw, 180px);
-        bottom: 110px;
-        opacity: 0.95;
+        width: clamp(170px, 42vw, 230px);
+        max-height: 44vh;
+        bottom: 120px;
+        opacity: 0.92;
     }
 
     .character.student {
-        left: -22px;
+        left: 8px;
     }
 
     .character.guide {
-        right: -22px;
+        right: 8px;
     }
 
     .screen {
@@ -860,6 +888,7 @@ button,
 
     .dialogue-box {
         bottom: max(10px, env(safe-area-inset-bottom));
+        padding: 18px 20px 52px;
     }
 
     .game-card {
@@ -922,6 +951,12 @@ button,
         bottom: 10px;
         font-size: 12px;
         padding: 6px 12px;
+    }
+
+    .click-hint {
+        right: 12px;
+        bottom: 10px;
+        font-size: 11px;
     }
 
     .game-header {
