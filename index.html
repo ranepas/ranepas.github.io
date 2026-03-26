@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="ru">
+    <head>
+        <meta charset="UTF-8" />
+        <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+        />
+        <title>Хроники НИУ РАНХиГС</title>
+        <link rel="stylesheet" href="styles.css" />
+    </head>
+    <body>
+        <button id="headerToggle" class="header-toggle">⌃</button>
+
+        <header id="topbar" class="topbar">
+            <div class="brand">
+                <img src="assets/logo.png" alt="Логотип" class="logo" />
+                <div>
+                    <h1>Хроники НИУ РАНХиГС</h1>
+                    <p>Интерактивная игра по истории академии</p>
+                </div>
+            </div>
+            <nav class="nav">
+                <button id="menuBtn">Меню</button>
+                <button id="aboutBtn">О проекте</button>
+                <button id="contactsBtn">Контакты</button>
+            </nav>
+        </header>
+
+        <div class="app">
+            <div id="bg" class="bg"></div>
+            <div class="overlay"></div>
+            <img id="character" class="character" src="" alt="Персонаж" />
+
+            <!-- Меню -->
+            <section id="screen-menu" class="screen active">
+                <div class="start-overlay">
+                    <div class="start-card menu-card">
+                        <h2>Путешествие во времени</h2>
+                        <p>
+                            Студент попадает в прошлое. Чтобы вернуться в
+                            настоящее, ему нужно пройти 4 исторических периода,
+                            выполнить мини-игры и восстановить путь развития
+                            академии.
+                        </p>
+                        <div class="menu-actions">
+                            <button id="startBtn" class="primary">
+                                Начать игру
+                            </button>
+                            <button id="rulesBtn">Как играть</button>
+                        </div>
+                        <div class="footer-block">
+                            <p>Контакты: данные / группа / авторы проекта</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- История -->
+            <section id="screen-story" class="screen">
+                <div class="story-layout">
+                    <div id="dialogueBox" class="dialogue-box">
+                        <div id="speaker" class="speaker"></div>
+                        <div id="storyText" class="story-text"></div>
+                        <button id="historyBtn" class="history-btn hidden">
+                            ← История
+                        </button>
+                        <div class="click-hint">нажмите, чтобы продолжить</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Игра -->
+            <section id="screen-game" class="screen">
+                <div class="game-layout">
+                    <div class="game-card">
+                        <div class="game-header">
+                            <div>
+                                <h2 id="gameTitle">Мини-игра</h2>
+                                <p id="gameSubtitle">Выполни задание.</p>
+                            </div>
+                            <div id="gameProgress" class="progress">
+                                Пройдено периодов: 0/4
+                            </div>
+                        </div>
+                        <div id="gameArea"></div>
+                        <div id="feedback"></div>
+                        <div class="game-footer">
+                            <button id="continueBtn" class="primary hidden">
+                                Продолжить
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Финал -->
+            <section id="screen-final" class="screen">
+                <div class="start-overlay">
+                    <div class="start-card final-card">
+                        <h2>Возвращение в настоящее</h2>
+                        <p>
+                            Ты прошёл все этапы истории и собрал временной ключ.
+                            Теперь путь института восстановлен.
+                        </p>
+                        <div id="finalSummary"></div>
+                        <div class="menu-actions">
+                            <button id="restartBtn" class="primary">
+                                Пройти ещё раз
+                            </button>
+                            <button id="finalAboutBtn">О проекте</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Модальные окна -->
+        <div id="modal" class="modal hidden">
+            <div class="modal-card">
+                <div class="history-header">
+                    <h3 id="modalTitle">Информация</h3>
+                    <button id="closeModalBtn">✕</button>
+                </div>
+                <div id="modalText"></div>
+            </div>
+        </div>
+
+        <div id="historyModal" class="history-modal hidden">
+            <div class="history-card">
+                <div class="history-header">
+                    <h3>История диалога</h3>
+                    <button id="closeHistoryBtn">✕</button>
+                </div>
+                <div id="historyList" class="history-list"></div>
+            </div>
+        </div>
+
+        <script src="script.js"></script>
+    </body>
+</html>
