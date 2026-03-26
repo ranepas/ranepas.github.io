@@ -440,6 +440,7 @@ const bgEl = document.getElementById("bg");
 const characterEl = document.getElementById("character");
 const screens = {
   menu: document.getElementById("screen-menu"),
+  intro: document.getElementById("screen-intro"),
   story: document.getElementById("screen-story"),
   game: document.getElementById("screen-game"),
   final: document.getElementById("screen-final"),
@@ -469,6 +470,11 @@ const contactsBtn = document.getElementById("contactsBtn");
 const closeModalBtn = document.getElementById("closeModalBtn");
 const restartBtn = document.getElementById("restartBtn");
 const finalAboutBtn = document.getElementById("finalAboutBtn");
+
+// Intro
+const introBgAEl = document.getElementById("introBgA");
+const introBgBEl = document.getElementById("introBgB");
+const introTapAreaEl = document.getElementById("introTapArea");
 
 function setBackground(key) {
   bgEl.style.background = backgrounds[key] || backgrounds.menu;
@@ -509,6 +515,109 @@ function switchScreen(name) {
   if (historyBtn) {
     historyBtn.classList.toggle("hidden", name !== "story");
   }
+}
+
+// ---------- Intro sequence (stud_base1/2/3) ----------
+const introImages = [
+  "assets/background/stud_base1.png",
+  "assets/background/stud_base2.png",
+  "assets/background/stud_base3.png",
+];
+
+let introIndex = 0;
+let introTimer = null;
+let introRunning = false;
+let introCurrentEl = null;
+let introInactiveEl = null;
+
+function setIntroImage(i) {
+  introIndex = i;
+  const src = introImages[introIndex] || introImages[0];
+  introCurrentEl.src = src;
+  introCurrentEl.classList.add("is-active");
+  introInactiveEl.classList.remove("is-active");
+}
+
+function showIntroNext() {
+  if (!introRunning) return;
+  if (introIndex >= introImages.length - 1) {
+    finishIntro();
+    return;
+  }
+
+  // swap fade direction
+  const nextIndex = introIndex + 1;
+  const prevEl = introCurrentEl;
+  const nextEl = introInactiveEl;
+
+  nextEl.src = introImages[nextIndex];
+  nextEl.classList.add("is-active");
+  prevEl.classList.remove("is-active");
+
+  introIndex = nextIndex;
+  introCurrentEl = nextEl;
+  introInactiveEl = prevEl;
+}
+
+function finishIntro() {
+  introRunning = false;
+  if (introTimer) clearTimeout(introTimer);
+  introTimer = null;
+
+  // hide intro layers
+  introBgAEl.classList.remove("is-active");
+  introBgBEl.classList.remove("is-active");
+  bgEl.style.opacity = "1";
+
+  if (topbarEl) topbarEl.classList.remove("hidden");
+  if (headerToggleBtn) headerToggleBtn.classList.remove("hidden");
+
+  setBackground("menu");
+  switchScreen("menu");
+}
+
+function startIntro() {
+  if (!introBgAEl || !introBgBEl || !introTapAreaEl) return;
+
+  introRunning = true;
+  introIndex = 0;
+  if (introTimer) clearTimeout(introTimer);
+  introTimer = null;
+
+  // init fade buffers
+  introCurrentEl = introBgAEl;
+  introInactiveEl = introBgBEl;
+  introCurrentEl.classList.add("is-active");
+  introInactiveEl.classList.remove("is-active");
+  introCurrentEl.src = introImages[0];
+  introInactiveEl.src = introImages[1] || introImages[0];
+
+  // dim main background while intro is playing
+  bgEl.style.opacity = "0";
+
+  switchScreen("intro");
+
+  if (topbarEl) topbarEl.classList.add("hidden");
+  if (headerToggleBtn) headerToggleBtn.classList.add("hidden");
+
+  introTapAreaEl.onclick = () => {
+    if (!introRunning) return;
+    if (introTimer) clearTimeout(introTimer);
+    introTimer = null;
+    showIntroNext();
+  };
+
+  // auto-advance too
+  const AUTO_STEP_MS = 1700;
+  const autoTick = () => {
+    if (!introRunning) return;
+    introTimer = null;
+    showIntroNext();
+    if (introRunning) {
+      introTimer = setTimeout(autoTick, AUTO_STEP_MS);
+    }
+  };
+  introTimer = setTimeout(autoTick, AUTO_STEP_MS);
 }
 
 function openModal(title, html) {
@@ -707,10 +816,8 @@ function loadTimelineGame(period) {
       if (item.year === expected.year) {
         selectedTimeline.push(item.year);
         card.classList.add("correct");
-        feedbackEl.textContent = "Верно. Это следующий правильный этап.";
 
         if (selectedTimeline.length === period.data.length) {
-          feedbackEl.textContent = "Хронология восстановлена.";
           finishPeriod();
         }
       } else {
@@ -775,7 +882,7 @@ function loadTrueFalseGame(period) {
     const q = period.data[tfIndex];
     if (answer === q.answer) {
       tfCorrect++;
-      feedbackEl.textContent = "Правильно.";
+      feedbackEl.textContent = "";
     } else {
       // На мобильных подсказку (длинный текст) на неверный ответ показывать не нужно:
       // она часто перекрывает интерактивные кнопки выбора.
@@ -906,11 +1013,8 @@ function loadExploreGame(period) {
       card.classList.add("opened");
       card.innerHTML = `<div><strong>${item.title}</strong><br>${item.text}</div>`;
       openedExplore++;
-      feedbackEl.textContent = `Открыто точек: ${openedExplore}/4`;
 
       if (openedExplore === period.data.length) {
-        feedbackEl.textContent =
-          "Все ключевые точки современного этапа исследованы.";
         finishPeriod();
       }
     });
@@ -1048,6 +1152,6 @@ if (headerToggleBtn) {
 }
 
 // Initialize
-setBackground("menu");
 hideCharacter();
 updateProgress();
+startIntro();
