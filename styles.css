@@ -176,6 +176,8 @@ button,
     background-repeat: no-repeat;
     transition: background-image 0.5s ease;
     z-index: 1;
+    opacity: 1;
+    transition: opacity 0.6s ease, background-image 0.5s ease;
 }
 
 .overlay {
@@ -189,6 +191,30 @@ button,
     );
     z-index: 2;
     pointer-events: none;
+}
+
+/* Intro background sequence */
+.intro-bg {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 1;
+    opacity: 0;
+    transition: opacity 0.8s ease;
+    pointer-events: none;
+}
+
+.intro-bg.is-active {
+    opacity: 1;
+}
+
+.intro-tap-area {
+    position: fixed;
+    inset: 0;
+    cursor: pointer;
+    z-index: 200;
 }
 
 .start-overlay {
@@ -857,9 +883,9 @@ button,
 
     .character {
         display: block;
-        width: clamp(170px, 42vw, 230px);
-        max-height: 44vh;
-        bottom: 120px;
+        width: clamp(200px, 45vw, 270px);
+        max-height: 50vh;
+        bottom: 130px;
         opacity: 0.92;
     }
 
@@ -888,7 +914,7 @@ button,
 
     .dialogue-box {
         bottom: max(10px, env(safe-area-inset-bottom));
-        padding: 18px 20px 98px;
+        padding: 18px 20px 86px;
         max-height: calc(100vh - 126px);
         overflow-y: auto;
     }
@@ -902,7 +928,7 @@ button,
     .story-text {
         min-height: 0;
         margin-bottom: 0;
-        padding-bottom: 54px; /* резерв под кнопки снизу внутри dialogue-box */
+        padding-bottom: 42px; /* резерв под кнопки снизу внутри dialogue-box */
     }
 
     .match-grid {
