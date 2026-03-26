@@ -641,6 +641,7 @@ function nextPeriod() {
 
 function loadMiniGame(period) {
   switchScreen("game");
+  hideCharacter();
   updateProgress();
   feedbackEl.textContent = "";
   continueBtn.classList.add("hidden");
@@ -784,7 +785,8 @@ function loadTrueFalseGame(period) {
       setTimeout(() => clickedBtn.classList.remove("wrong-answer"), 500);
     }
     tfIndex++;
-    setTimeout(() => renderQuestion(), 600);
+    feedbackEl.scrollIntoView({ behavior: "smooth", block: "nearest" });
+    setTimeout(() => renderQuestion(), 1400);
   }
 
   renderQuestion();
