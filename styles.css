@@ -557,6 +557,18 @@ button,
     line-height: 1.5;
 }
 
+.game-success-text {
+    font-size: 17px;
+    line-height: 1.65;
+    color: #f3f4f6;
+    white-space: pre-line;
+    padding: 12px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+    border-left: 4px solid #921a1d;
+    animation: game-success-reveal 0.55s ease forwards;
+}
+
 @keyframes game-success-reveal {
     from {
         opacity: 0;
@@ -886,21 +898,21 @@ button,
 
     .character {
         display: block;
-        z-index: 82;
-        width: clamp(240px, 62vw, 360px);
+        z-index: 4;
+        width: clamp(210px, 56vw, 300px);
         max-height: none;
         height: auto;
-        bottom: max(22vh, 140px);
+        bottom: max(30vh, 160px);
         opacity: 1;
         object-fit: contain;
     }
 
     .character.student {
-        left: 4px;
+        left: 0;
     }
 
     .character.guide {
-        right: 4px;
+        right: 0;
     }
 
     .screen {
@@ -929,6 +941,11 @@ button,
         top: max(68px, env(safe-area-inset-top));
         bottom: max(10px, env(safe-area-inset-bottom));
         max-height: none;
+    }
+
+    .game-footer {
+        flex-shrink: 0;
+        margin-top: 16px;
     }
 
     .story-text {
@@ -1000,7 +1017,8 @@ button,
     }
 
     #gameArea {
-        min-height: auto;
+        flex: 1 1 auto;
+        min-height: 0;
         margin-top: 10px;
         padding: 4px;
     }
