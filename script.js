@@ -793,15 +793,22 @@ function loadTrueFalseGame(period) {
 
   function checkTF(answer, trueBtn, falseBtn) {
     const q = period.data[tfIndex];
+    const chosenBtn = answer ? trueBtn : falseBtn;
+    const correctBtn = q.answer ? trueBtn : falseBtn;
+
+    trueBtn.classList.add("tf-locked");
+    falseBtn.classList.add("tf-locked");
+
     if (answer === q.answer) {
       tfCorrect++;
+      chosenBtn.classList.add("tf-correct");
     } else {
-      const clickedBtn = answer ? trueBtn : falseBtn;
-      clickedBtn.classList.add("wrong-answer");
-      setTimeout(() => clickedBtn.classList.remove("wrong-answer"), 500);
+      chosenBtn.classList.add("tf-wrong");
+      correctBtn.classList.add("tf-correct");
     }
+
     tfIndex++;
-    setTimeout(() => renderQuestion(), 650);
+    setTimeout(() => renderQuestion(), 1000);
   }
 
   renderQuestion();
