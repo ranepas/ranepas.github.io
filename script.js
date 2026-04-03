@@ -455,6 +455,7 @@ const closeHistoryBtn = document.getElementById("closeHistoryBtn");
 const gameTitleEl = document.getElementById("gameTitle");
 const gameSubtitleEl = document.getElementById("gameSubtitle");
 const gameAreaEl = document.getElementById("gameArea");
+const feedbackEl = document.getElementById("feedback");
 const continueBtn = document.getElementById("continueBtn");
 const finalSummaryEl = document.getElementById("finalSummary");
 const modalEl = document.getElementById("modal");
@@ -642,6 +643,7 @@ function loadMiniGame(period) {
   switchScreen("game");
   hideCharacter();
   updateProgress();
+  feedbackEl.textContent = "";
   continueBtn.classList.add("hidden");
   gameTitleEl.textContent = period.title;
   gameSubtitleEl.textContent = period.subtitle;
@@ -656,14 +658,11 @@ function finishPeriod() {
   const period = periods[currentPeriodIndex];
   completedPeriods++;
   updateProgress();
-  gameAreaEl.innerHTML = "";
-  const msg = document.createElement("div");
-  msg.className = "game-success-text";
-  msg.setAttribute("aria-live", "polite");
-  gameAreaEl.appendChild(msg);
+  feedbackEl.setAttribute("aria-live", "polite");
   continueBtn.classList.remove("hidden");
   continueBtn.onclick = () => {
     continueBtn.classList.add("hidden");
+    feedbackEl.textContent = "";
     if (typingTimer) {
       clearInterval(typingTimer);
       typingTimer = null;
@@ -671,7 +670,7 @@ function finishPeriod() {
     isTyping = false;
     nextPeriod();
   };
-  typeText(period.successText, msg, 18);
+  typeText(period.successText, feedbackEl, 18);
 }
 
 function shuffle(array) {
