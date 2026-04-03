@@ -455,7 +455,6 @@ const closeHistoryBtn = document.getElementById("closeHistoryBtn");
 const gameTitleEl = document.getElementById("gameTitle");
 const gameSubtitleEl = document.getElementById("gameSubtitle");
 const gameAreaEl = document.getElementById("gameArea");
-const feedbackEl = document.getElementById("feedback");
 const continueBtn = document.getElementById("continueBtn");
 const finalSummaryEl = document.getElementById("finalSummary");
 const modalEl = document.getElementById("modal");
@@ -643,7 +642,6 @@ function loadMiniGame(period) {
   switchScreen("game");
   hideCharacter();
   updateProgress();
-  feedbackEl.textContent = "";
   continueBtn.classList.add("hidden");
   gameTitleEl.textContent = period.title;
   gameSubtitleEl.textContent = period.subtitle;
@@ -658,13 +656,22 @@ function finishPeriod() {
   const period = periods[currentPeriodIndex];
   completedPeriods++;
   updateProgress();
-  feedbackEl.textContent = period.successText;
+  gameAreaEl.innerHTML = "";
+  const msg = document.createElement("div");
+  msg.className = "game-success-text";
+  msg.setAttribute("aria-live", "polite");
+  gameAreaEl.appendChild(msg);
   continueBtn.classList.remove("hidden");
   continueBtn.onclick = () => {
     continueBtn.classList.add("hidden");
-    feedbackEl.textContent = "";
+    if (typingTimer) {
+      clearInterval(typingTimer);
+      typingTimer = null;
+    }
+    isTyping = false;
     nextPeriod();
   };
+  typeText(period.successText, msg, 18);
 }
 
 function shuffle(array) {
@@ -687,10 +694,8 @@ function loadTimelineGame(period) {
   selectedTimeline = [];
   const items = shuffle(period.data);
   const title = document.createElement("p");
+  title.className = "game-instruction";
   title.textContent = "Нажимай карточки в правильном хронологическом порядке.";
-  title.style.textAlign = "center";
-  title.style.padding = "10px";
-  title.style.color = "#e2e8f0";
   gameAreaEl.appendChild(title);
 
   const list = document.createElement("div");
@@ -707,10 +712,8 @@ function loadTimelineGame(period) {
       if (item.year === expected.year) {
         selectedTimeline.push(item.year);
         card.classList.add("correct");
-        feedbackEl.textContent = "Верно. Это следующий правильный этап.";
 
         if (selectedTimeline.length === period.data.length) {
-          feedbackEl.textContent = "Хронология восстановлена.";
           finishPeriod();
         }
       } else {
@@ -726,6 +729,7 @@ function loadTimelineGame(period) {
 function loadTrueFalseGame(period) {
   tfIndex = 0;
   tfCorrect = 0;
+  gameAreaEl.innerHTML = "";
   const container = document.createElement("div");
   container.className = "truefalse-box";
   gameAreaEl.appendChild(container);
@@ -734,13 +738,15 @@ function loadTrueFalseGame(period) {
     container.innerHTML = "";
     if (tfIndex >= period.data.length) {
       if (tfCorrect >= 3) {
-        feedbackEl.textContent =
-          "Хорошо. Основные факты этого периода ты уловил.";
         finishPeriod();
       } else {
-        feedbackEl.textContent =
+        gameAreaEl.innerHTML = "";
+        const note = document.createElement("p");
+        note.className = "game-retry-notice";
+        note.textContent =
           "Пока не хватает верных ответов. Попробуй ещё раз.";
-        loadTrueFalseGame(period);
+        gameAreaEl.appendChild(note);
+        setTimeout(() => loadTrueFalseGame(period), 1400);
       }
       return;
     }
@@ -775,20 +781,12 @@ function loadTrueFalseGame(period) {
     const q = period.data[tfIndex];
     if (answer === q.answer) {
       tfCorrect++;
-      feedbackEl.textContent = "Правильно.";
     } else {
-      // На мобильных подсказку (длинный текст) на неверный ответ показывать не нужно:
-      // она часто перекрывает интерактивные кнопки выбора.
-      feedbackEl.textContent = "";
-      // Визуальный отклик для неправильного ответа
       const clickedBtn = answer ? trueBtn : falseBtn;
       clickedBtn.classList.add("wrong-answer");
       setTimeout(() => clickedBtn.classList.remove("wrong-answer"), 500);
     }
     tfIndex++;
-    if (feedbackEl.textContent) {
-      feedbackEl.scrollIntoView({ behavior: "smooth", block: "nearest" });
-    }
     setTimeout(() => renderQuestion(), 650);
   }
 
@@ -799,6 +797,10 @@ function loadMatchingGame(period) {
   matchSelectedDate = null;
   matchSelectedEvent = null;
   matchSolved = 0;
+
+  const instruct = document.createElement("p");
+  instruct.className = "game-instruction";
+  instruct.textContent = "Соедини даты с правильными событиями.";
 
   const wrapper = document.createElement("div");
   wrapper.className = "match-grid";
@@ -845,8 +847,8 @@ function loadMatchingGame(period) {
 
   wrapper.appendChild(leftCol);
   wrapper.appendChild(rightCol);
+  gameAreaEl.appendChild(instruct);
   gameAreaEl.appendChild(wrapper);
-  feedbackEl.textContent = "Соедини даты с правильными событиями.";
 }
 
 function tryMatch(period, leftCol, rightCol) {
@@ -866,16 +868,11 @@ function tryMatch(period, leftCol, rightCol) {
     rightEl.classList.remove("selected");
     leftEl.classList.add("done");
     rightEl.classList.add("done");
-    feedbackEl.textContent = "Совпадение найдено.";
     matchSolved++;
     if (matchSolved === period.data.dates.length) {
-      feedbackEl.textContent = "Все соответствия собраны.";
       finishPeriod();
     }
   } else {
-    // Убираем подсказку-длинный текст при неверном ответе,
-    // чтобы она не мешала чтению и выбору вариантов.
-    feedbackEl.textContent = "";
     leftEl.classList.remove("selected");
     rightEl.classList.remove("selected");
   }
@@ -886,11 +883,9 @@ function tryMatch(period, leftCol, rightCol) {
 function loadExploreGame(period) {
   openedExplore = 0;
   const intro = document.createElement("p");
+  intro.className = "game-instruction";
   intro.textContent =
     "Открой все 4 точки, чтобы собрать сведения о современном этапе.";
-  intro.style.textAlign = "center";
-  intro.style.padding = "10px";
-  intro.style.color = "#e2e8f0";
   gameAreaEl.appendChild(intro);
 
   const grid = document.createElement("div");
@@ -906,11 +901,9 @@ function loadExploreGame(period) {
       card.classList.add("opened");
       card.innerHTML = `<div><strong>${item.title}</strong><br>${item.text}</div>`;
       openedExplore++;
-      feedbackEl.textContent = `Открыто точек: ${openedExplore}/4`;
+      intro.textContent = `Открыто точек: ${openedExplore}/4`;
 
       if (openedExplore === period.data.length) {
-        feedbackEl.textContent =
-          "Все ключевые точки современного этапа исследованы.";
         finishPeriod();
       }
     });
