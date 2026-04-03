@@ -654,11 +654,14 @@ function loadMiniGame(period) {
   if (period.game === "explore") loadExploreGame(period);
 }
 
+function isMobileGameFinishLayout() {
+  return window.matchMedia("(max-width: 640px)").matches;
+}
+
 function finishPeriod() {
   const period = periods[currentPeriodIndex];
   completedPeriods++;
   updateProgress();
-  feedbackEl.setAttribute("aria-live", "polite");
   continueBtn.classList.remove("hidden");
   continueBtn.onclick = () => {
     continueBtn.classList.add("hidden");
@@ -670,7 +673,19 @@ function finishPeriod() {
     isTyping = false;
     nextPeriod();
   };
-  typeText(period.successText, feedbackEl, 18);
+
+  if (isMobileGameFinishLayout()) {
+    feedbackEl.textContent = "";
+    gameAreaEl.innerHTML = "";
+    const msg = document.createElement("div");
+    msg.className = "game-success-text";
+    msg.setAttribute("aria-live", "polite");
+    gameAreaEl.appendChild(msg);
+    typeText(period.successText, msg, 18);
+  } else {
+    feedbackEl.setAttribute("aria-live", "polite");
+    typeText(period.successText, feedbackEl, 18);
+  }
 }
 
 function shuffle(array) {
