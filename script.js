@@ -659,11 +659,10 @@ function finishPeriod() {
   completedPeriods++;
   updateProgress();
   feedbackEl.textContent = "";
-  gameAreaEl.innerHTML = "";
   const msg = document.createElement("div");
   msg.className = "game-success-text";
   msg.setAttribute("aria-live", "polite");
-  gameAreaEl.appendChild(msg);
+  gameAreaEl.replaceChildren(msg);
   continueBtn.classList.remove("hidden");
   continueBtn.onclick = () => {
     continueBtn.classList.add("hidden");
