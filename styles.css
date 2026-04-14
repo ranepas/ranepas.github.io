@@ -531,23 +531,8 @@ button,
     text-align: center;
 }
 
-#feedback:empty {
-    display: none;
-}
-
-#feedback:not(:empty) {
-    min-height: 0;
-    overflow: visible;
-    font-size: 17px;
-    line-height: 1.6;
-    color: #f3f4f6;
-    margin: 16px 0;
-    white-space: pre-line;
-    padding: 12px;
-    background: rgba(255, 255, 255, 0.05);
-    border-radius: 12px;
-    border-left: 4px solid #921a1d;
-    animation: game-success-reveal 0.55s ease forwards;
+#feedback {
+    display: none !important;
 }
 
 .game-instruction {
